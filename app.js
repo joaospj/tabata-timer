@@ -6,15 +6,17 @@ class Timer {
     this.reset = reset;
     this.timerInput = timerInput;
 
-    this.duration.value = parseFloat(this.timerInput.value) || 30;
-
     this.start.addEventListener("click", this.startTimer);
     this.pause.addEventListener("click", this.pauseTimer);
     this.reset.addEventListener("click", this.resetTimer);
   }
 
   startTimer = () => {
-    if (!this.interval) {
+    if (!this.interval && parseFloat(this.timerInput.value)) {
+      if (!this.timerInput.disabled) {
+        this.duration.value = parseFloat(this.timerInput.value);
+        this.timerInput.disabled = true;
+      }
       this.interval = setInterval(this.tick, 10);
     }
   };
@@ -24,13 +26,17 @@ class Timer {
     this.interval = undefined;
   };
 
-  resetTimer = () => {
-    this.timeLeft = parseFloat(this.timerInput.value) || 30;
+  resetTimer = (fromTick) => {
+    if (fromTick !== 1) {
+      this.timeLeft = parseFloat(this.timerInput.value) || 30;
+    }
+    this.pauseTimer();
+    this.timerInput.disabled = false;
   };
 
   tick = () => {
     if (this.timeLeft <= 0) {
-      this.pauseTimer;
+      this.resetTimer(1);
     } else {
       this.timeLeft = this.timeLeft - 0.01;
     }
