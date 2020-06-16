@@ -12,9 +12,14 @@ class Timer {
   }
 
   startTimer = () => {
+    // Check if input is greater than 0 to start,
+    // and prevent Start button action when resumed
     if (!this.interval && parseFloat(this.timerInput.value)) {
+      // Allow resume time when paused
       if (!this.timerInput.disabled) {
         this.duration.value = parseFloat(this.timerInput.value);
+        // Set the correct type of the number to timerInput
+        this.timerInput.value = this.duration.value;
         this.timerInput.disabled = true;
       }
       this.interval = setInterval(this.tick, 10);
@@ -23,19 +28,23 @@ class Timer {
 
   pauseTimer = () => {
     clearInterval(this.interval);
+    // Doing this the timer can be paused and resumed anytime
     this.interval = undefined;
   };
 
   resetTimer = (fromTick) => {
+    // When reset is called for tick(), keep the duration value at 0.00
     if (fromTick !== 1) {
       this.timeLeft = parseFloat(this.timerInput.value) || 30;
     }
     this.pauseTimer();
+    // timerInput must be disabled to prevent change a timer in course
     this.timerInput.disabled = false;
   };
 
   tick = () => {
     if (this.timeLeft <= 0) {
+      // Reset timer when timeLeft reaches to 0.00
       this.resetTimer(1);
     } else {
       this.timeLeft = this.timeLeft - 0.01;
