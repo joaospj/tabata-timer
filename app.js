@@ -17,9 +17,9 @@ class Timer {
     if (!this.interval && parseFloat(this.timerInput.value)) {
       // Allow resume time when paused
       if (!this.timerInput.disabled) {
-        this.duration.value = parseFloat(this.timerInput.value);
+        this.seconds = parseFloat(this.timerInput.value);
         // Set the correct type of the number to timerInput
-        this.timerInput.value = this.duration.value;
+        this.timerInput.value = this.seconds;
         this.timerInput.disabled = true;
       }
       this.interval = setInterval(this.tick, 10);
@@ -35,7 +35,7 @@ class Timer {
   resetTimer = (fromTick) => {
     // When reset is called for tick(), keep the duration value at 0.00
     if (fromTick !== 1) {
-      this.timeLeft = parseFloat(this.timerInput.value) || 30;
+      this.timeLeft = parseFloat(this.timerInput.value) || 0;
     }
     this.pauseTimer();
     // timerInput must be disabled to prevent change a timer in course
@@ -44,6 +44,9 @@ class Timer {
 
   tick = () => {
     if (this.timeLeft <= 0) {
+      // Fix a math bug
+      this.timeLeft = 0;
+
       // Reset timer when timeLeft reaches to 0.00
       this.resetTimer(1);
     } else {
@@ -52,13 +55,18 @@ class Timer {
   };
 
   get timeLeft() {
-    return parseFloat(this.duration.value);
+    return parseFloat(this.seconds);
   }
 
   set timeLeft(time) {
-    this.duration.value = time.toFixed(2);
-    this.duration.innerText = this.duration.value;
+    this.seconds = time;
+    this.duration.innerText = this.formatSeconds(this.seconds);
   }
+
+  formatSeconds = (seconds) => {
+    const sec = (seconds % 60).toFixed(2);
+    return sec < 10 ? `0${sec}` : sec;
+  };
 }
 
 const duration = document.getElementById("duration");
