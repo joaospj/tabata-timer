@@ -64,13 +64,15 @@ class Timer {
 
   set timeLeft(time) {
     this.seconds = time;
-    postMessage(this.formatSeconds(this.seconds));
+    postMessage(this.formatTime(this.seconds));
   }
 
   // Formar seconds to be between 0 and 59 and add a 0 when number is below 10
-  formatSeconds = (seconds) => {
+  formatTime = (seconds) => {
     const sec = (seconds % 60).toFixed(2);
-    return sec < 10 ? `0${sec}` : sec;
+    let min = Math.floor(seconds / 60);
+    min = min < 10 ? `0${min}` : min;
+    return sec < 10 ? `${min}:0${sec}` : `${min}:${sec}`;
   };
 }
 
