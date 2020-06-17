@@ -29,11 +29,13 @@ class Timer {
     // When reset is called for tick(), keep the duration value at 0.00
     if (fromTick !== 1) {
       this.timeLeft = this.timerInput || 0;
+    } else {
+      postMessage("reset");
     }
     this.pauseTimer();
-    // timerInput must be disabled to prevent change a timer in course
+
+    // With this, the timer will be able to start again
     this.disabled = false;
-    postMessage("reset");
   };
 
   tick = () => {

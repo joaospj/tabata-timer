@@ -24,11 +24,13 @@ if (window.Worker) {
   reset.onclick = function () {
     myWorker.postMessage(["reset"]);
     timerInput.disabled = false;
+    roundInput.disabled = false;
   };
 
   myWorker.onmessage = function (e) {
     if (e.data === "reset") {
       timerInput.disabled = false;
+      roundInput.disabled = false;
     } else {
       duration.innerText = e.data;
     }
