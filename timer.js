@@ -44,9 +44,9 @@ class Timer {
       this.timeLeft = 0;
 
       this.roundInput--;
-      console.log(this.roundInput);
 
       if (this.roundInput) {
+        // Reset timer and start another round
         this.resetTimer();
         this.startTimer(this.timerInput, this.roundInput);
       } else {
@@ -67,6 +67,7 @@ class Timer {
     postMessage(this.formatSeconds(this.seconds));
   }
 
+  // Formar seconds to be between 0 and 59 and add a 0 when number is below 10
   formatSeconds = (seconds) => {
     const sec = (seconds % 60).toFixed(2);
     return sec < 10 ? `0${sec}` : sec;
