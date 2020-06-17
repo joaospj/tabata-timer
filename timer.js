@@ -32,8 +32,8 @@ class Timer {
   };
 
   tick = () => {
-    if (this.timeLeft <= 0) {
-      // Fix a math bug
+    if (this.timeLeft <= 0.01) {
+      // Fix end timer bug, browser always ends with negative milliseconds e.g. -0.009999...
       this.timeLeft = 0;
 
       // Reset timer when timeLeft reaches to 0.00

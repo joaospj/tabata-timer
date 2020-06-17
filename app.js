@@ -8,8 +8,6 @@ if (window.Worker) {
   const myWorker = new Worker("timer.js");
 
   start.onclick = function () {
-    console.log(timerInput.value);
-
     myWorker.postMessage(["start", timerInput.value]);
     if (parseFloat(timerInput.value)) {
       timerInput.disabled = true;
