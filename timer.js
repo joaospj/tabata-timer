@@ -1,6 +1,8 @@
 class Timer {
   constructor() {
     this.disabled = false;
+    this.timerInput = 0;
+    this.roundInput = 0;
   }
 
   startTimer = (timerInput, roundInput) => {
@@ -12,6 +14,7 @@ class Timer {
     if (!this.interval && this.timerInput > 0 && this.roundInput > 0) {
       if (!this.disabled) {
         this.seconds = this.timerInput;
+        this.totalSeconds = this.timerInput * (this.roundInput - 1);
         this.disabled = true;
       }
 
@@ -64,10 +67,14 @@ class Timer {
 
   set timeLeft(time) {
     this.seconds = time;
-    postMessage(this.formatTime(this.seconds));
+
+    postMessage([
+      this.formatTime(this.seconds),
+      this.formatTime(this.totalSeconds + this.seconds || 0),
+    ]);
   }
 
-  // Formar seconds to be between 0 and 59 and add a 0 when number is below 10
+  // Format minutes and seconds to be between 0 and 59 and add a 0 when number is below 10
   formatTime = (seconds) => {
     const sec = (seconds % 60).toFixed(2);
     let min = Math.floor(seconds / 60);
@@ -88,6 +95,16 @@ onmessage = function (e) {
       break;
     case "reset":
       timer.resetTimer();
+      break;
+    case "inputs":
+      timer.timerInput = parseFloat(e.data[1]) > 0 ? parseFloat(e.data[1]) : 0;
+      timer.roundInput = parseInt(e.data[2]) > 0 ? parseInt(e.data[2]) : 0;
+
+      postMessage([
+        timer.formatTime(timer.timerInput),
+        timer.formatTime(timer.timerInput * timer.roundInput),
+      ]);
+
       break;
     default:
       postMessage("wrong case!");
