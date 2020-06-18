@@ -5,12 +5,16 @@ class Timer {
     this.roundInput = 0;
   }
 
-  startTimer = (timerInput, roundInput) => {
+  startTimer = (timerInput, roundInput, elapsed) => {
     this.timerInput = parseFloat(timerInput) >= 0 ? parseFloat(timerInput) : 0;
 
     // This won't change the value of rounds when start/pause is clicked
     if (!this.roundInput) {
       this.roundInput = parseInt(roundInput) > 0 ? parseInt(roundInput) : 0;
+    }
+
+    if (!this.elapsed) {
+      this.elapsed = elapsed;
     }
 
     // Don't let the timer starts if is already one timer resuming
@@ -38,6 +42,7 @@ class Timer {
       this.timeLeft = this.timerInput || 0;
     } else {
       postMessage("reset");
+      this.elapsed = 0;
     }
     this.pauseTimer();
     // With this, the timer will be able to start again
@@ -63,6 +68,7 @@ class Timer {
       }
     } else {
       this.timeLeft = this.timeLeft - 0.01;
+      this.elapsed = this.elapsed + 0.01;
     }
   };
 
@@ -76,6 +82,7 @@ class Timer {
     postMessage([
       this.formatTime(this.seconds),
       this.formatTime(this.totalSeconds + this.seconds || 0),
+      this.formatTime(this.elapsed),
     ]);
   }
 
@@ -93,12 +100,13 @@ const timer = new Timer();
 onmessage = function (e) {
   switch (e.data[0]) {
     case "start":
-      timer.startTimer(e.data[1], e.data[2]);
+      timer.startTimer(e.data[1], e.data[2], 0);
       break;
     case "pause":
       timer.pauseTimer();
       break;
     case "reset":
+      timer.elapsed = 0;
       timer.resetTimer();
       break;
     case "inputs":
@@ -108,6 +116,7 @@ onmessage = function (e) {
       postMessage([
         timer.formatTime(timer.timerInput),
         timer.formatTime(timer.timerInput * timer.roundInput),
+        timer.formatTime(0),
       ]);
 
       break;

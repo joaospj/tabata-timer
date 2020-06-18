@@ -71,7 +71,7 @@ if (window.Worker) {
       //Change the duration of the timer every 0.01s
       duration.innerText = e.data[0];
       total.innerText = e.data[1];
-      //elapsed.innerText = e.data[2];
+      elapsed.innerText = e.data[2];
     }
   };
 } else {
