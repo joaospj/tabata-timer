@@ -7,7 +7,11 @@ class Timer {
 
   startTimer = (timerInput, roundInput) => {
     this.timerInput = parseFloat(timerInput) >= 0 ? parseFloat(timerInput) : 0;
-    this.roundInput = parseInt(roundInput) > 0 ? parseInt(roundInput) : 0;
+
+    // This won't change the value of rounds when start/pause is clicked
+    if (!this.roundInput) {
+      this.roundInput = parseInt(roundInput) > 0 ? parseInt(roundInput) : 0;
+    }
 
     // Don't let the timer starts if is already one timer resuming
     // and only starts a timer if the seconds and rounds are greater than 0
@@ -36,7 +40,6 @@ class Timer {
       postMessage("reset");
     }
     this.pauseTimer();
-
     // With this, the timer will be able to start again
     this.disabled = false;
   };
@@ -45,6 +48,8 @@ class Timer {
     if (this.timeLeft <= 0.01) {
       // Fix end timer bug, browser always ends with negative milliseconds e.g. -0.009999...
       this.timeLeft = 0;
+
+      console.log(this.roundInput);
 
       this.roundInput--;
 

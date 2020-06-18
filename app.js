@@ -1,5 +1,6 @@
 const duration = document.querySelector("#duration");
 const total = document.querySelector("#total");
+const elapsed = document.querySelector("#elapsed");
 const timerInput = document.querySelector("#timerInput");
 const roundInput = document.querySelector("#roundInput");
 const buttonStartPause = document.querySelector("#start-pause");
@@ -49,6 +50,7 @@ if (window.Worker) {
     buttonStartPause.innerText = "Start";
   };
 
+  //Get the values of inputs on the screen on their change
   const inputsChange = () => {
     myWorker.postMessage(["inputs", timerInput.value, roundInput.value]);
   };
@@ -69,6 +71,7 @@ if (window.Worker) {
       //Change the duration of the timer every 0.01s
       duration.innerText = e.data[0];
       total.innerText = e.data[1];
+      //elapsed.innerText = e.data[2];
     }
   };
 } else {
